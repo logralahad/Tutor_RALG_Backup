@@ -59,4 +59,14 @@
     <servlet-name>RegistroServlet</servlet-name>
     <url-pattern>/RegistroServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>RolControlador</display-name>
+    <servlet-name>RolControlador</servlet-name>
+    <servlet-class>ralg.ulsa.controlador.RolControlador</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RolControlador</servlet-name>
+    <url-pattern>/RolControlador</url-pattern>
+  </servlet-mapping>
 </web-app>

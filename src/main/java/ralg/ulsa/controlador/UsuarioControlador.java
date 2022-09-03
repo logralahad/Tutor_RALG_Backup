@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import ralg.ulsa.modelo.Persona;
 import ralg.ulsa.modelo.Producto;
-import ralg.ulsa.modelo.Rol;
 import ralg.ulsa.modelo.Usuario;
 
 /**
@@ -172,32 +171,7 @@ public class UsuarioControlador extends HttpServlet {
 
 	protected void registrarRol(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String nombre = request.getParameter("nombre");
-		String descripcion = request.getParameter("descripcion");
 
-		try {
-			if (isEmptyOrNull(nombre) || isEmptyOrNull(descripcion)) {
-				request.setAttribute("error", "Datos de ingreso erróneos o incompletos");
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/usuario/registrarRol.jsp");
-				dispatcher.forward(request, response);
-
-			} else {
-				Rol rol = new Rol();
-				rol.setId(1);
-				rol.setNombre(nombre);
-				rol.setDescripcion(descripcion);
-
-				request.setAttribute("success", "Un nuevo rol ha sido agregado al sistema.");
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/usuario/registrarRol.jsp");
-				dispatcher.forward(request, response);
-			}
-
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		} finally {
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/usuario/rol.jsp");
-			dispatcher.forward(request, response);
-		}
 	}
 
 	protected void registrarPersona(HttpServletRequest request, HttpServletResponse response)
