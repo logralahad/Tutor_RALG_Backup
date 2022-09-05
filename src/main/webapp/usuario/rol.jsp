@@ -46,28 +46,29 @@
                     <table class="table table-striped table-sm">
                         <thead>
                             <tr>
-                                <th class="col-md-2" scope="col">Id</th>
-                                <th class="col-md-5" scope="col">Nombre</th>
-                                <th class="col-md-5" scope="col">Descripcion</th>
+                                <th class="col-2 text-center align-middle" scope="col">Id</th>
+                                <th class="col-5 text-center align-middle" scope="col">Nombre</th>
+                                <th class="col-5 text-center align-middle" scope="col">Descripcion</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Administrador</td>
-                                <td>Superusuario con todos los permisos</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Rol 2</td>
-                                <td>Neque porro quisquam est qui dolorem</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Rol 3</td>
-                                <td>Ipsum quia dolor sit amet, consectetur, adipisci velit</td>
-                            </tr>
-                        </tbody>
+                        <c:if test="${listaRoles != null}">
+                            <tbody>
+                                <c:forEach items="${listaRoles}"
+                                    var="rol">
+                                    <tr>
+                                        <th scope="row"
+                                            class="text-center align-middle"><c:out
+                                                value="${rol.getId()}" /></th>
+                                        <td
+                                            class="text-center align-middle"><c:out
+                                                value="${rol.getNombre()}" /></td>
+                                        <td
+                                            class="text-center align-middle"><c:out
+                                                value="${rol.getDescripcion()}" /></td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </c:if>
                     </table>
                 </div>
             </main>

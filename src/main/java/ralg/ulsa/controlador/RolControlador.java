@@ -7,6 +7,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import ralg.ulsa.dao.hibernate.RolDAO;
 import ralg.ulsa.modelo.Rol;
 
 /**
@@ -18,6 +20,12 @@ public class RolControlador extends HttpServlet {
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
+	private RolDAO rolDao;
+
+	public void init() {
+		rolDao = new RolDAO();
+	}
+
 	public RolControlador() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -50,19 +58,24 @@ public class RolControlador extends HttpServlet {
 			String descripcion = request.getParameter("descripcion");
 			if (isEmptyOrNull(nombre) || isEmptyOrNull(descripcion)) {
 				request.setAttribute("error", "Datos de ingreso erróneos o incompletos");
+				response.sendRedirect(request.getContextPath() + "/usuario/registrarRol.jsp");
 
 			} else {
 				Rol rol = new Rol();
-				rol.setId(1);
 				rol.setNombre(nombre);
 				rol.setDescripcion(descripcion);
+				rolDao.createRol(rol);
+				HttpSession session = request.getSession();
+				synchronized (session) {
+					request.setAttribute("listaRoles", rolDao.getAllRoles());
+					RequestDispatcher dispatcher = request.getRequestDispatcher("/usuario/rol.jsp");
+					dispatcher.forward(request, response);
+				}
 			}
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
-		} finally {
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/usuario/registrarRol.jsp");
-			dispatcher.forward(request, response);
+			response.sendRedirect(request.getContextPath() + "/usuario/rol.jsp");
 		}
 	}
 
