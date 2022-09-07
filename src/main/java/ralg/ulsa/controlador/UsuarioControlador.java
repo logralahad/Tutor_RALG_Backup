@@ -63,12 +63,6 @@ public class UsuarioControlador extends HttpServlet {
 			case "/registrarUsuario":
 				this.registrarUsuario(request, response);
 				break;
-			case "/registrarRol":
-				this.registrarRol(request, response);
-				break;
-			case "/registrarPersona":
-				this.registrarPersona(request, response);
-				break;
 			case "/registrarProducto":
 				this.registrarProducto(request, response);
 				break;
@@ -165,55 +159,6 @@ public class UsuarioControlador extends HttpServlet {
 			System.out.println(e.getMessage());
 		} finally {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/usuario/usuario.jsp");
-			dispatcher.forward(request, response);
-		}
-	}
-
-	protected void registrarRol(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-	}
-
-	protected void registrarPersona(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		String parametroNombre = request.getParameter("nombre");
-		String parametroPaterno = request.getParameter("paterno");
-		String parametroMaterno = request.getParameter("materno");
-		String parametroTelefono = request.getParameter("telefono");
-		String parametroRFC = request.getParameter("rfc");
-		String parametroNacimiento = request.getParameter("nacimiento");
-		String parametroDomicilio = request.getParameter("domicilio");
-		String parametroEdad = request.getParameter("edad");
-
-		try {
-			if (isEmptyOrNull(parametroNombre) || isEmptyOrNull(parametroPaterno) || isEmptyOrNull(parametroMaterno)
-					|| isEmptyOrNull(parametroTelefono) || isEmptyOrNull(parametroRFC) || isEmptyOrNull(parametroEdad)
-					|| isEmptyOrNull(parametroNacimiento) || isEmptyOrNull(parametroDomicilio)) {
-				request.setAttribute("error", "Datos de ingreso erróneos o incompletos");
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/usuario/registrarPersona.jsp");
-				dispatcher.forward(request, response);
-
-			} else {
-				Persona persona = new Persona();
-				persona.setId(1);
-				persona.setNombre(parametroNombre);
-				persona.setPaterno(parametroPaterno);
-				persona.setMaterno(parametroMaterno);
-				persona.setEdad(Integer.parseInt(parametroEdad));
-				persona.setTelefono(parametroTelefono);
-				persona.setRfc(parametroRFC);
-				persona.setFechaNacimiento(parametroNacimiento);
-				persona.setDomicilio(parametroDomicilio);
-
-				request.setAttribute("success", "Una nueva persona ha sido agregado al sistema.");
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/usuario/registrarPersona.jsp");
-				dispatcher.forward(request, response);
-			}
-
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		} finally {
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/usuario/persona.jsp");
 			dispatcher.forward(request, response);
 		}
 	}

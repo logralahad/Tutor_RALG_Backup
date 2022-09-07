@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Registrar usuario</title>
+<title>Registrar producto</title>
 <jsp:include page="/componentes/bootstrap.jsp"></jsp:include>
 
 <link rel="stylesheet" type="text/css"

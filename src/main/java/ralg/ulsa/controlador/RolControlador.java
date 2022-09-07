@@ -75,7 +75,7 @@ public class RolControlador extends HttpServlet {
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
-			response.sendRedirect(request.getContextPath() + "/usuario/rol.jsp");
+			response.sendRedirect(request.getContextPath() + "/usuario/registrarRol.jsp");
 		}
 	}
 

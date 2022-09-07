@@ -69,4 +69,14 @@
     <servlet-name>RolControlador</servlet-name>
     <url-pattern>/RolControlador</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>PersonaControlador</display-name>
+    <servlet-name>PersonaControlador</servlet-name>
+    <servlet-class>ralg.ulsa.controlador.PersonaControlador</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PersonaControlador</servlet-name>
+    <url-pattern>/PersonaControlador</url-pattern>
+  </servlet-mapping>
 </web-app>

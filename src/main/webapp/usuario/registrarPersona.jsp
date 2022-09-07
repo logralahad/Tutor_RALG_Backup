@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Registrar usuario</title>
+<title>Registrar persona</title>
 <jsp:include page="/componentes/bootstrap.jsp"></jsp:include>
 
 <link rel="stylesheet" type="text/css"
@@ -57,7 +57,7 @@
                 <div class="row justify-content-center">
                     <div class="col">
                         <form
-                            action="<%=request.getContextPath()%>/Usuario/registrarPersona">
+                            action="<%=request.getContextPath()%>/PersonaControlador">
                             <div class="mb-3 row">
                                 <label for="nombre"
                                     class="col-sm-2 col-form-label">Nombre</label>

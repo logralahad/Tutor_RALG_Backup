@@ -8,6 +8,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 
+import ralg.ulsa.modelo.Persona;
 import ralg.ulsa.modelo.Rol;
 
 public class HibernateUtil {
@@ -31,6 +32,7 @@ public class HibernateUtil {
 
 				configuration.setProperties(settings);
 				configuration.addAnnotatedClass(Rol.class);
+				configuration.addAnnotatedClass(Persona.class);
 
 				ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 						.applySettings(configuration.getProperties()).build();
