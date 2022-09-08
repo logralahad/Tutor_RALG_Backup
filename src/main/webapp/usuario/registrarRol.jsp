@@ -57,7 +57,7 @@
                 <div class="row justify-content-center">
                     <div class="col">
                         <form
-                            action="<%=request.getContextPath()%>/RolControlador">
+                            action="<%=request.getContextPath()%>/Rol/registrar">
                             <div class="mb-3 row">
                                 <label for="nombre"
                                     class="col-sm-2 col-form-label">Nombre</label>

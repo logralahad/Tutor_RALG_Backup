@@ -67,7 +67,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>RolControlador</servlet-name>
-    <url-pattern>/RolControlador</url-pattern>
+    <url-pattern>/Rol/*</url-pattern>
   </servlet-mapping>
   <servlet>
     <description></description>
@@ -77,6 +77,6 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>PersonaControlador</servlet-name>
-    <url-pattern>/PersonaControlador</url-pattern>
+    <url-pattern>/Persona/*</url-pattern>
   </servlet-mapping>
 </web-app>

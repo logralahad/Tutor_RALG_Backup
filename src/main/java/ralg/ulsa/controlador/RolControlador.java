@@ -1,8 +1,8 @@
 package ralg.ulsa.controlador;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,7 +38,7 @@ public class RolControlador extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		registrar(request, response);
+		procesar(request, response);
 	}
 
 	/**
@@ -48,7 +48,31 @@ public class RolControlador extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		registrar(request, response);
+		procesar(request, response);
+	}
+
+	protected void procesar(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		response.setContentType("text/html;charset=UTF-8");
+		try (PrintWriter out = response.getWriter()) {
+			String action = request.getPathInfo();
+			if (action.contains("eliminar")) {
+				String[] partes = action.split("/");
+				Integer id = Integer.parseInt(partes[partes.length - 1]);
+				this.eliminar(request, response, id);
+			} else if (action.contains("editar")) {
+				String[] partes = action.split("/");
+				Integer id = Integer.parseInt(partes[partes.length - 1]);
+				this.editar(request, response, id);
+			} else if (action.contains("registrar")) {
+				this.registrar(request, response);
+			} else if (action.contains("actualizar")) {
+				this.actualizar(request, response);
+			} else {
+				response.sendRedirect(request.getContextPath() + "/");
+			}
+		}
 	}
 
 	private void registrar(HttpServletRequest request, HttpServletResponse response)
@@ -67,10 +91,69 @@ public class RolControlador extends HttpServlet {
 				rolDao.createRol(rol);
 				HttpSession session = request.getSession();
 				synchronized (session) {
-					request.setAttribute("listaRoles", rolDao.getAllRoles());
-					RequestDispatcher dispatcher = request.getRequestDispatcher("/usuario/rol.jsp");
-					dispatcher.forward(request, response);
+					session.setAttribute("listaRoles", rolDao.getAllRoles());
+					response.sendRedirect(request.getContextPath() + "/usuario/rol.jsp");
 				}
+			}
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			response.sendRedirect(request.getContextPath() + "/usuario/registrarRol.jsp");
+		}
+	}
+
+	private void actualizar(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		try {
+			String nombre = request.getParameter("nombre");
+			String descripcion = request.getParameter("descripcion");
+			if (isEmptyOrNull(nombre) || isEmptyOrNull(descripcion)) {
+				request.setAttribute("error", "Datos de ingreso erróneos o incompletos");
+				response.sendRedirect(request.getContextPath() + "/usuario/editarRol.jsp");
+
+			} else {
+				HttpSession session = request.getSession();
+				Rol rol = (Rol) session.getAttribute("rolToEdit");
+				rol.setNombre(nombre);
+				rol.setDescripcion(descripcion);
+				rolDao.updateRol(rol);
+				synchronized (session) {
+					session.setAttribute("listaRoles", rolDao.getAllRoles());
+					response.sendRedirect(request.getContextPath() + "/usuario/rol.jsp");
+				}
+			}
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			response.sendRedirect(request.getContextPath() + "/usuario/editarRol.jsp");
+		}
+	}
+
+	private void editar(HttpServletRequest request, HttpServletResponse response, Integer id)
+			throws ServletException, IOException {
+		try {
+			Rol rol = rolDao.getRol(id);
+			if (rol != null) {
+				HttpSession session = request.getSession();
+				synchronized (session) {
+					session.setAttribute("rolToEdit", rol);
+					response.sendRedirect(request.getContextPath() + "/usuario/editarRol.jsp");
+				}
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			response.sendRedirect(request.getContextPath() + "/usuario/rol.jsp");
+		}
+	}
+
+	private void eliminar(HttpServletRequest request, HttpServletResponse response, Integer id)
+			throws ServletException, IOException {
+		try {
+			rolDao.deleteRol(id);
+			HttpSession session = request.getSession();
+			synchronized (session) {
+				session.setAttribute("listaRoles", rolDao.getAllRoles());
+				response.sendRedirect(request.getContextPath() + "/usuario/rol.jsp");
 			}
 
 		} catch (Exception e) {

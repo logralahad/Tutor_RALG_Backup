@@ -46,9 +46,21 @@
                     <table class="table table-striped table-sm">
                         <thead>
                             <tr>
-                                <th class="col-2 text-center align-middle" scope="col">Id</th>
-                                <th class="col-5 text-center align-middle" scope="col">Nombre</th>
-                                <th class="col-5 text-center align-middle" scope="col">Descripcion</th>
+                                <th
+                                    class="col-2 text-center align-middle"
+                                    scope="col">Id</th>
+                                <th
+                                    class="col-4 text-center align-middle"
+                                    scope="col">Nombre</th>
+                                <th
+                                    class="col-4 text-center align-middle"
+                                    scope="col">Descripcion</th>
+                                <th
+                                    class="col-1 text-center align-middle"
+                                    scope="col"></th>
+                                <th
+                                    class="col-1 text-center align-middle"
+                                    scope="col"></th> 
                             </tr>
                         </thead>
                         <c:if test="${listaRoles != null}">
@@ -65,6 +77,30 @@
                                         <td
                                             class="text-center align-middle"><c:out
                                                 value="${rol.getDescripcion()}" /></td>
+                                        <td
+                                            class="text-center align-middle">
+                                            <form
+                                                action="<%=request.getContextPath()%>/Rol/editar/${rol.getId()}">
+                                                <button type="submit"
+                                                    class="btn btn-success w-50">
+                                                    <i
+                                                        class="fa fa-pencil-square-o"
+                                                        aria-hidden="true"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                        <td
+                                            class="text-center align-middle">
+                                            <form
+                                                action="<%=request.getContextPath()%>/Rol/eliminar/${rol.getId()}">
+                                                <button type="submit"
+                                                    class="btn btn-danger w-50">
+                                                    <i
+                                                        class="fa fa-trash"
+                                                        aria-hidden="true"></i>
+                                                </button>
+                                            </form>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                             </tbody>

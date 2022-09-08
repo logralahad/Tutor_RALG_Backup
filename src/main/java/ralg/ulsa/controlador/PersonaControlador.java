@@ -1,8 +1,8 @@
 package ralg.ulsa.controlador;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +29,7 @@ public class PersonaControlador extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		registrar(request, response);
+		procesar(request, response);
 	}
 
 	/**
@@ -39,7 +39,24 @@ public class PersonaControlador extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		registrar(request, response);
+		procesar(request, response);
+	}
+
+	protected void procesar(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		response.setContentType("text/html;charset=UTF-8");
+		try (PrintWriter out = response.getWriter()) {
+			String action = request.getPathInfo();
+			switch (action) {
+			case "/registrar":
+				this.registrar(request, response);
+				break;
+			default:
+				response.sendRedirect(request.getContextPath() + "/");
+				break;
+			}
+		}
 	}
 
 	private void registrar(HttpServletRequest request, HttpServletResponse response)
@@ -74,9 +91,8 @@ public class PersonaControlador extends HttpServlet {
 				personaDAO.createPersona(persona);
 				HttpSession session = request.getSession();
 				synchronized (session) {
-					request.setAttribute("listaPersonas", personaDAO.getAllPersonas());
-					RequestDispatcher dispatcher = request.getRequestDispatcher("/usuario/persona.jsp");
-					dispatcher.forward(request, response);
+					session.setAttribute("listaPersonas", personaDAO.getAllPersonas());
+					response.sendRedirect(request.getContextPath() + "/usuario/persona.jsp");
 				}
 			}
 
