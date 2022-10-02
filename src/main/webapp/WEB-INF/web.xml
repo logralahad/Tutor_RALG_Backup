@@ -79,4 +79,14 @@
     <servlet-name>PersonaControlador</servlet-name>
     <url-pattern>/Persona/*</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>UsuarioDAO</display-name>
+    <servlet-name>UsuarioDAO</servlet-name>
+    <servlet-class>ralg.ulsa.dao.hibernate.UsuarioDAO</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UsuarioDAO</servlet-name>
+    <url-pattern>/UsuarioDAO</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -69,6 +69,8 @@ public class RolControlador extends HttpServlet {
 				this.registrar(request, response);
 			} else if (action.contains("actualizar")) {
 				this.actualizar(request, response);
+			} else if (action.contains("listarRoles")) {
+				this.listarRoles(request, response);
 			} else {
 				response.sendRedirect(request.getContextPath() + "/");
 			}
@@ -159,6 +161,20 @@ public class RolControlador extends HttpServlet {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			response.sendRedirect(request.getContextPath() + "/usuario/registrarRol.jsp");
+		}
+	}
+
+	private void listarRoles(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		try {
+			HttpSession session = request.getSession();
+			synchronized (session) {
+				session.setAttribute("listaRoles", rolDao.getAllRoles());
+				response.sendRedirect(request.getContextPath() + "/usuario/rol.jsp");
+			}
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 		}
 	}
 

@@ -34,57 +34,15 @@
 					<form method="POST"
 						action="<%=request.getContextPath()%>/Usuario/registrar">
 						<div class="mb-3 row">
-							<label for="nombre" class="col-sm-3 col-form-label">Nombre:</label>
-							<div class="col-sm-9">
-								<input type="text" name="nombre" class="form-control">
-							</div>
-						</div>
-						<div class="mb-3 row">
-							<label for="apePaterno" class="col-sm-3 col-form-label">Apellido paterno:</label>
-							<div class="col-sm-9">
-								<input type="text" name="apePaterno" class="form-control">
-							</div>
-						</div>
-						<div class="mb-3 row">
-							<label for="apeMaterno" class="col-sm-3 col-form-label">Apellido materno:</label>
-							<div class="col-sm-9">
-								<input type="text" name="apeMaterno" class="form-control">
-							</div>
-						</div>
-						<div class="mb-3 row">
-							<label for="edad" class="col-sm-3 col-form-label">Edad:</label>
-							<div class="col-sm-9">
-								<input type="number" name="edad" class="form-control">
-							</div>
-						</div>
-						<div class="mb-3 row">
-							<label for="telefono" class="col-sm-3 col-form-label">Teléfono:</label>
-							<div class="col-sm-9">
-								<input type="number" name="telefono" class="form-control">
-							</div>
-						</div>
-						<div class="mb-3 row">
 							<label for="correo" class="col-sm-3 col-form-label">Correo electrónico:</label>
 							<div class="col-sm-9">
 								<input type="email" name="correo" class="form-control">
 							</div>
 						</div>
 						<div class="mb-3 row">
-							<label for="password" class="col-sm-3 col-form-label">Contraseña:</label>
+							<label for="password" class="col-sm-3 col-form-label">Contrase&ntilde;a:</label>
 							<div class="col-sm-9">
 								<input type="password" name="password" class="form-control">
-							</div>
-						</div>
-						<div class="mb-3 row">
-							<label for="nombreEmpresa" class="col-sm-3 col-form-label">Nombre empresa:</label>
-							<div class="col-sm-9">
-								<input type="text" name="nombreEmpresa" class="form-control">
-							</div>
-						</div>
-						<div class="mb-3 row">
-							<label for="direccion" class="col-sm-3 col-form-label">Dirección:</label>
-							<div class="col-sm-9">
-								<input type="text" name="direccion" class="form-control">
 							</div>
 						</div>
 						<div class="text-center text-lg-start mt-4 pt-2">

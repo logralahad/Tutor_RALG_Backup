@@ -2,6 +2,8 @@ package ralg.ulsa.controlador;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -9,7 +11,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import ralg.ulsa.modelo.Persona;
+import ralg.ulsa.dao.hibernate.UsuarioDAO;
 import ralg.ulsa.modelo.Producto;
 import ralg.ulsa.modelo.Usuario;
 
@@ -18,32 +20,23 @@ import ralg.ulsa.modelo.Usuario;
  */
 public class UsuarioControlador extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private UsuarioDAO usuarioDAO;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public UsuarioControlador() {
-		super();
-		// TODO Auto-generated constructor stub
+	public void init() {
+		usuarioDAO = new UsuarioDAO();
 	}
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
+	public UsuarioControlador() {
+		super();
+	}
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		procesar(request, response);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		procesar(request, response);
 	}
 
@@ -55,10 +48,13 @@ public class UsuarioControlador extends HttpServlet {
 			String action = request.getPathInfo();
 			switch (action) {
 			case "/login":
-				this.perfil(request, response);
+				this.login(request, response);
 				break;
 			case "/registrar":
 				this.registrar(request, response);
+				break;
+			case "/listarUsuarios":
+				this.listarUsuarios(request, response);
 				break;
 			case "/registrarUsuario":
 				this.registrarUsuario(request, response);
@@ -73,26 +69,25 @@ public class UsuarioControlador extends HttpServlet {
 		}
 	}
 
-	protected void perfil(HttpServletRequest request, HttpServletResponse response)
+	protected void login(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
 			String parametroCorreo = request.getParameter("correo");
 			String parametroPwd = request.getParameter("contrasenia");
 			if ((parametroCorreo == null || parametroCorreo.isEmpty())
 					&& (parametroPwd == null || parametroPwd.isEmpty())) {
-				request.setAttribute("msg", "Datos de ingresos erróneos");
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/usuario/login.jsp");
-				dispatcher.forward(request, response);
+				request.setAttribute("error", "Datos de ingreso erróneos o incompletos");
+				response.sendRedirect(request.getContextPath() + "/usuario/login.jsp");
 			} else {
-				// Buscar usuario y contraseña en la base de datos
-				Usuario usuario = new Usuario();
-				usuario.setCorreo(parametroCorreo);
-				usuario.setPassword(parametroPwd.trim());
-
-				HttpSession session = request.getSession();
-				synchronized (session) {
-					session.setAttribute("usuario", usuario);
-					response.sendRedirect(request.getContextPath() + "/usuario/perfil.jsp");
+				Usuario usuario = usuarioDAO.login(parametroCorreo, parametroPwd);
+				if (usuario != null) {
+					HttpSession session = request.getSession();
+					synchronized (session) {
+						session.setAttribute("usuario", usuario);
+						response.sendRedirect(request.getContextPath() + "/usuario/perfil.jsp");
+					}
+				} else {
+					response.sendRedirect(request.getContextPath() + "/usuario/login.jsp");
 				}
 			}
 		} catch (Exception e) {
@@ -102,47 +97,61 @@ public class UsuarioControlador extends HttpServlet {
 
 	protected void registrar(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String parametroNombre = request.getParameter("name");
-		String parametroPaterno = request.getParameter("paterno");
-		String parametroMaterno = request.getParameter("materno");
-		Integer parametroEdad = Integer.parseInt(request.getParameter("edad"));
-		String parametroTelefono = request.getParameter("telefono");
-		String parametroCorreo = request.getParameter("correo");
-		String parametroPwd = request.getParameter("pwd");
-		String parametroEmpresa = request.getParameter("empresa");
-		String parametroDireccion = request.getParameter("direccion");
-
 		try {
-			Persona persona = new Persona();
-			persona.setNombre(parametroNombre);
-			persona.setPaterno(parametroPaterno);
-			persona.setMaterno(parametroMaterno);
-			persona.setEdad(parametroEdad);
-			persona.setTelefono(parametroTelefono);
+			String parametroCorreo = request.getParameter("correo");
+			String parametroPwd = request.getParameter("password");
 
-			Usuario usuario = new Usuario();
-			usuario.setCorreo(parametroCorreo);
-			usuario.setPassword(parametroPwd);
+			if (isEmptyOrNull(parametroCorreo) || isEmptyOrNull(parametroPwd)) {
+				request.setAttribute("error", "Datos de ingreso erróneos o incompletos");
+				response.sendRedirect(request.getContextPath() + "/usuario/registrar.jsp");
+
+			} else {
+				Usuario usuario = new Usuario();
+				usuario.setCorreo(parametroCorreo);
+				usuario.setPassword(parametroPwd);
+				usuario.setStatus(true);
+				Calendar today = Calendar.getInstance();
+				SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+				String todayFormatted = format1.format(today.getTime());
+				usuario.setFechaRegistro(todayFormatted);
+
+				today.add(Calendar.YEAR, 1);
+				String vigentFormatted = format1.format(today.getTime());
+				usuario.setFechaVigencia(vigentFormatted);
+				usuarioDAO.createUsuario(usuario);
+				response.sendRedirect(request.getContextPath() + "/usuario/login.jsp");
+			}
+		} catch (Exception e) {
+			response.sendRedirect(request.getContextPath() + "/usuario/registrar.jsp");
+			e.printStackTrace();
+		}
+	}
+
+	protected void listarUsuarios(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		try {
+			HttpSession session = request.getSession();
+			synchronized (session) {
+				session.setAttribute("listaUsuarios", usuarioDAO.getAllUsuarios());
+				response.sendRedirect(request.getContextPath() + "/usuario/usuario.jsp");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/usuario/login.jsp");
-			dispatcher.forward(request, response);
 		}
 	}
 
 	protected void registrarUsuario(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		Boolean parametroEstatus = Boolean.valueOf(request.getParameter("estatus"));
-		String parametroCorreo = request.getParameter("correo");
-		String parametroPwd = request.getParameter("password");
-		String parametroVigencia = request.getParameter("vigencia");
 
 		try {
+			Boolean parametroEstatus = Boolean.valueOf(request.getParameter("estatus"));
+			String parametroCorreo = request.getParameter("correo");
+			String parametroPwd = request.getParameter("password");
+			String parametroVigencia = request.getParameter("vigencia");
+
 			if (isEmptyOrNull(parametroCorreo) || isEmptyOrNull(parametroPwd) || isEmptyOrNull(parametroVigencia)) {
 				request.setAttribute("error", "Datos de ingreso erróneos o incompletos");
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/usuario/registrarUsuario.jsp");
-				dispatcher.forward(request, response);
+				response.sendRedirect(request.getContextPath() + "/usuario/registrarUsuario.jsp");
 
 			} else {
 				Usuario usuario = new Usuario();
@@ -150,17 +159,20 @@ public class UsuarioControlador extends HttpServlet {
 				usuario.setPassword(parametroPwd);
 				usuario.setStatus(parametroEstatus);
 				usuario.setFechaVigencia(parametroVigencia);
-				request.setAttribute("success", "Un nuevo usuario ha sido agregado al sistema.");
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/usuario/registrarUsuario.jsp");
-				dispatcher.forward(request, response);
-			}
 
+				Calendar today = Calendar.getInstance();
+				SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+				String todayFormatted = format1.format(today.getTime());
+				usuario.setFechaRegistro(todayFormatted);
+
+				usuarioDAO.createUsuario(usuario);
+				response.sendRedirect(request.getContextPath() + "/usuario/registrarUsuario.jsp");
+			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		} finally {
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/usuario/usuario.jsp");
-			dispatcher.forward(request, response);
+			response.sendRedirect(request.getContextPath() + "/usuario/usuario.jsp");
+			e.printStackTrace();
 		}
+
 	}
 
 	protected void registrarProducto(HttpServletRequest request, HttpServletResponse response)

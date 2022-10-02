@@ -11,12 +11,12 @@
             </a></li>
 
             <li class="nav-item"><a class="nav-link"
-                href="<%=request.getContextPath()%>/usuario/rol.jsp">
+                href="<%=request.getContextPath()%>/Rol/listarRoles">
                     <span class="align-text-bottom"></span><i
                     class="fa fa-cogs" aria-hidden="true"></i> Rol
             </a></li>
             <li class="nav-item"><a class="nav-link"
-                href="<%=request.getContextPath()%>/usuario/usuario.jsp">
+                href="<%=request.getContextPath()%>/Usuario/listarUsuarios">
                     <span class="align-text-bottom"></span><i
                     class="fa fa-user" aria-hidden="true"></i> Usuario
             </a></li>

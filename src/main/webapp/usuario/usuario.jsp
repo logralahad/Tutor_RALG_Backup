@@ -46,36 +46,91 @@
                     <table class="table table-striped table-sm">
                         <thead>
                             <tr>
-                                <th class="col-md-2" scope="col">Id</th>
-                                <th class="col-md-3" scope="col">Correo</th>
-                                <th class="col-md-2" scope="col">Estatus</th>
-                                <th class="col-md-3" scope="col">Fecha de registro</th>
-                                <th class="col-md-3" scope="col">Fecha de vigencia</th>
+                                <th
+                                    class="col-1 text-center align-middle"
+                                    scope="col">Id</th>
+                                <th
+                                    class="col-2 text-center align-middle"
+                                    scope="col">Correo</th>
+                                <th
+                                    class="col-1 text-center align-middle"
+                                    scope="col">Estatus</th>
+                                <th
+                                    class="col-3 text-center align-middle"
+                                    scope="col">Fecha de registro</th>
+                                <th
+                                    class="col-3 text-center align-middle"
+                                    scope="col">Fecha de vigencia</th>
+                                <th
+                                    class="col-1 text-center align-middle"
+                                    scope="col"></th>
+                                <th
+                                    class="col-1 text-center align-middle"
+                                    scope="col"></th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>random@gmail.com</td>
-                                <td>Activo</td>
-                                <td>14/05/2022</td>
-                                <td>14/05/2022</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>placeholder@gmail.com</td>
-                                <td>Inactivo</td>
-                                <td>14/05/2022</td>
-                                <td>14/05/2022</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>data@gmail.com</td>
-                                <td>Activo</td>
-                                <td>14/05/2022</td>
-                                <td>14/05/2022</td>
-                            </tr>
-                        </tbody>
+                        <c:if test="${listaUsuarios != null}">
+                            <tbody>
+                                <c:forEach items="${listaUsuarios}"
+                                    var="usuario">
+                                    <tr>
+                                        <th scope="row"
+                                            class="text-center align-middle"><c:out
+                                                value="${usuario.getId()}" /></th>
+                                        <td
+                                            class="text-center align-middle"><c:out
+                                                value="${usuario.getCorreo()}" /></td>
+                                        <td
+                                            class="text-center align-middle">
+                                            <c:choose>
+                                                <c:when
+                                                    test="${usuario.getStatus() == true}">
+                                                    <i
+                                                        class="fa fa-check"
+                                                        aria-hidden="true"></i>
+                                                </c:when>
+                                                <c:when
+                                                    test="${usuario.getStatus() == false}">
+                                                    <i
+                                                        class="fa fa-close"
+                                                        aria-hidden="true"></i>
+                                                </c:when>
+                                            </c:choose>
+                                        </td>
+                                        <td
+                                            class="text-center align-middle"><c:out
+                                                value="${usuario.getFechaRegistro()}" /></td>
+                                        <td
+                                            class="text-center align-middle"><c:out
+                                                value="${usuario.getFechaVigencia()}" /></td>
+                                        <td
+                                            class="text-center align-middle">
+                                            <form
+                                                action="<%=request.getContextPath()%>/Usuario/editar/${usuario.getId()}">
+                                                <button type="submit"
+                                                    class="btn btn-success w-50">
+                                                    <i
+                                                        class="fa fa-pencil-square-o"
+                                                        aria-hidden="true"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                        <td
+                                            class="text-center align-middle">
+                                            <form
+                                                action="<%=request.getContextPath()%>/Usuario/eliminar/${usuario.getId()}">
+                                                <button type="submit"
+                                                    class="btn btn-danger w-50">
+                                                    <i
+                                                        class="fa fa-trash"
+                                                        aria-hidden="true"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </c:if>
                     </table>
                 </div>
             </main>

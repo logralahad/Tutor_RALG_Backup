@@ -32,6 +32,10 @@
                         <li class="nav-item"><a class="nav-link"
                             href="#">Enlace</a></li>
                     </ul>
+                    <form class="d-flex pe-2" action="<%=request.getContextPath()%>/usuario/registrar.jsp">
+                        <button class="btn btn-outline-primary"
+                            type="submit">Crear cuenta</button>
+                    </form>
                     <form class="d-flex" action="<%=request.getContextPath()%>/usuario/login.jsp">
                         <button class="btn btn-outline-success"
                             type="submit">Login</button>
